@@ -6,7 +6,8 @@ Rise 360, built for technical training, plus the showcase site that catalogs the
 Inspired by the wider Rise custom-block community (Cognito Blox's catalog model,
 Forged Frameworks' case-study presentation, and individual community blocks) —
 but every block here is an original implementation: original code, design,
-scenarios, and sample content.
+scenarios, and sample content. See [INSPIRATION.md](INSPIRATION.md) for the
+full set of references, what we're borrowing from each, and what we aren't.
 
 ## The blocks
 
