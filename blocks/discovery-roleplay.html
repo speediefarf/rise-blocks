@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Discovery Roleplay — The Training Request</title>
+<style>
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:#f4f6f4;color:#1d2521;line-height:1.5}
+  .rp{max-width:980px;margin:0 auto;padding:20px}
+  .rp-label{font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#0e7a5f}
+  .rp-title{margin:4px 0 6px;font-size:26px;letter-spacing:-.01em}
+  .rp-brief{margin:0 0 8px;color:#43514a;font-size:15px;max-width:720px}
+  .rp-honest{margin:0 0 18px;font-size:13.5px;color:#8a5a12;background:#fdf6e7;border:1px solid #ecd9a8;
+    border-radius:10px;padding:9px 13px;max-width:720px}
+  .rp-grid{display:grid;grid-template-columns:1fr 260px;gap:16px;align-items:start}
+  @media(max-width:780px){.rp-grid{grid-template-columns:1fr}}
+  .rp-chat{background:#fff;border:1px solid #dde3dd;border-radius:16px;display:flex;flex-direction:column;
+    box-shadow:0 8px 24px rgba(20,32,28,.05)}
+  .rp-log{padding:18px;display:flex;flex-direction:column;gap:12px;min-height:300px;max-height:460px;overflow-y:auto}
+  .rp-msg{max-width:82%;padding:11px 14px;border-radius:14px;font-size:15px}
+  .rp-msg.sam{background:#eef3f0;border-bottom-left-radius:4px;align-self:flex-start}
+  .rp-msg.you{background:#0e7a5f;color:#fff;border-bottom-right-radius:4px;align-self:flex-end}
+  .rp-msg .who{display:block;font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;opacity:.65;margin-bottom:3px}
+  .rp-msg.typing{color:#5c665f;font-style:italic}
+  .rp-input{border-top:1px solid #e4e9e4;padding:12px;display:flex;gap:8px}
+  .rp-input input{flex:1;border:2px solid #d4dad4;border-radius:10px;padding:11px 13px;font-size:15px;font-family:inherit}
+  .rp-input input:focus{outline:none;border-color:#0e7a5f}
+  .rp-btn{border:0;border-radius:10px;padding:11px 16px;font-size:14.5px;font-weight:700;cursor:pointer;background:#0e7a5f;color:#fff}
+  .rp-btn:disabled{background:#a9b3ac;cursor:not-allowed}
+  .rp-btn.amber{background:#e8a33d;color:#231a05}
+  .rp-btn.dark{background:#1d2521;color:#fff}
+  .rp-btn.ghost{background:transparent;border:2px solid #d4dad4;color:#1d2521}
+  .rp-chips{display:flex;flex-wrap:wrap;gap:7px;padding:0 12px 12px}
+  .rp-chip{border:1.5px solid #bcd6cc;background:#f2f8f5;color:#0a5c48;border-radius:999px;
+    padding:6px 12px;font-size:13px;font-weight:600;cursor:pointer}
+  .rp-chip:hover{background:#e3f0ea}
+  .rp-side{display:flex;flex-direction:column;gap:16px}
+  .rp-panel{background:#fff;border:1px solid #dde3dd;border-radius:16px;padding:16px 18px}
+  .rp-panel h3{margin:0 0 10px;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:#5c665f}
+  .rp-mood-name{font-size:19px;font-weight:800;margin-bottom:6px}
+  .rp-meter{height:10px;background:#edf0ed;border-radius:99px;overflow:hidden}
+  .rp-meter i{display:block;height:100%;background:#0e7a5f;border-radius:99px;transition:width .5s ease}
+  .rp-clock{font-size:15px}
+  .rp-clock b{font-size:19px}
+  .rp-notes{margin:0;padding-left:18px;font-size:14px;color:#2c3831}
+  .rp-notes li{margin-bottom:7px}
+  .rp-notes-empty{font-size:14px;color:#8a938c;margin:0}
+  .rp-wrap{padding:18px}
+  .rp-wrap h3{margin:0 0 10px;font-size:18px}
+  .rp-rec{display:block;width:100%;text-align:left;border:2px solid #d4dad4;background:#fff;border-radius:12px;
+    padding:13px 15px;font-size:15px;cursor:pointer;margin-bottom:10px;font-family:inherit}
+  .rp-rec:hover{border-color:#0e7a5f;background:#f2f8f5}
+  .rp-score{padding:18px}
+  .rp-score h3{margin:0 0 12px;font-size:19px}
+  .rp-score-row{border-top:1px solid #edf0ed;padding:10px 0}
+  .rp-score-row:first-of-type{border-top:0}
+  .rp-score-row .k{font-size:12px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:#0e7a5f}
+  .rp-score-row .v{font-weight:700;margin:2px 0}
+  .rp-score-row p{margin:0;font-size:14px;color:#43514a}
+</style>
+</head>
+<body>
+<div class="rp">
+  <div class="rp-label">Scenario · stakeholder discovery</div>
+  <h2 class="rp-title">The Training Request</h2>
+  <p class="rp-brief">Sam Rivera, a support operations manager, wants a mandatory one-hour training for all
+     40 of his agents — by Friday. His reason: average handle time has jumped about 30% in two weeks.
+     Your job is to run the discovery conversation before anyone builds anything. Ask questions by typing,
+     the way you would in the meeting.</p>
+  <p class="rp-honest"><b>Honest mechanics:</b> Sam is scripted, not an AI. He answers by matching keywords
+     in what you type, and he can miss. If he stalls, rephrase or tap a suggested question. That's the
+     constraint real discovery conversations have too — the person across the table only answers what you ask.</p>
+
+  <div class="rp-grid">
+    <div class="rp-chat">
+      <div class="rp-log" id="rpLog" aria-live="polite"></div>
+      <div id="rpCompose">
+        <div class="rp-chips" id="rpChips"></div>
+        <form class="rp-input" id="rpForm">
+          <input id="rpText" type="text" autocomplete="off" placeholder="Ask Sam a question…">
+          <button class="rp-btn" type="submit">Send</button>
+          <button class="rp-btn amber" type="button" id="rpWrapBtn">Wrap up</button>
+        </form>
+      </div>
+      <div id="rpEnd"></div>
+    </div>
+
+    <div class="rp-side">
+      <div class="rp-panel">
+        <h3>Sam's mood</h3>
+        <div class="rp-mood-name" id="rpMoodName">Open</div>
+        <div class="rp-meter"><i id="rpMoodBar" style="width:62%"></i></div>
+      </div>
+      <div class="rp-panel">
+        <h3>Meeting clock</h3>
+        <p class="rp-clock"><b id="rpTurns">12</b> turns left<br>
+        <span style="color:#5c665f;font-size:13.5px">Rambling costs you. Short, pointed questions earn more.</span></p>
+      </div>
+      <div class="rp-panel">
+        <h3>Case notes</h3>
+        <p class="rp-notes-empty" id="rpNotesEmpty">Nothing yet. What you uncover lands here.</p>
+        <ul class="rp-notes" id="rpNotes"></ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   EDIT ME — the persona. Each topic: trigger words/phrases Sam
+   listens for (phrases score higher than single words), the
+   replies he gives as you dig (layers), an optional clue that
+   lands in the case notes, and a mood effect.
+   ============================================================ */
+var TURNS_TOTAL = 12;
+
+var TOPICS = [
+  {
+    id: "greeting",
+    triggers: ["hello", "hi sam", "hey", "good morning", "good afternoon", "thanks for meeting", "thanks for your time"],
+    layers: [
+      "Hi — thanks for taking this quickly. I'll be honest, I mostly need a training date I can put in front of leadership on Friday. But ask what you need to ask."
+    ],
+    short: "Hi — happy to talk, though I mostly need a training date for Friday.",
+    mood: 2
+  },
+  {
+    id: "the_ask",
+    triggers: ["training", "course", "class", "teach", "mandatory", "session", "curriculum", "the training", "build the training", "want training", "need training"],
+    layers: [
+      "The ask is simple: a one-hour mandatory session for all 40 agents on handling calls efficiently. Handle time is up, agents are slower — that's a skills thing, and training is the lever I control.",
+      "Look, I know training gets eye-rolls. But I can't exactly walk into the exec review and say 'the vibe is off.' A course is a plan with a date on it."
+    ],
+    short: "I want a one-hour mandatory training for all 40 agents — handle time is up and training is the lever I control.",
+    mood: -2
+  },
+  {
+    id: "symptom",
+    triggers: ["handle time", "aht", "how much", "data", "numbers", "metrics", "slower", "how bad", "percent"],
+    layers: [
+      "Average handle time on phone tickets is up about 30% — from roughly six minutes to nearly eight. Quality scores haven't moved, customers aren't complaining more. The calls just take longer.",
+      "I pulled the report myself. It's not one or two long calls dragging the average — the whole distribution shifted. Every call seems to take a couple of minutes longer than it used to."
+    ],
+    short: "Handle time is up ~30%, six minutes to nearly eight, across the board.",
+    clue: "Handle time is up ~30% (about 6 → 8 minutes), evenly across calls — not a few outliers.",
+    mood: 3
+  },
+  {
+    id: "timing",
+    triggers: ["when did", "when does", "start", "began", "timeline", "how long", "sudden", "gradual"],
+    layers: [
+      "About two weeks ago. And it wasn't a drift — the chart is flat, flat, flat, then it steps up and stays up.",
+      "If you want the exact day: the step happens on October 28th. Before that, normal. After that, the new normal."
+    ],
+    short: "It started about two weeks ago — a sharp step up, not a drift.",
+    clue: "The jump starts sharply on Oct 28 — a step change, not a gradual decline.",
+    mood: 4
+  },
+  {
+    id: "change",
+    triggers: ["change", "changed", "update", "release", "deploy", "rollout", "crm", "system", "software", "new field", "process change", "anything different", "anything changed", "anything change", "something changed", "something change"],
+    layers: [
+      "Around then? The CRM got a release — end of October. They added a mandatory 'resolution category' field agents have to fill in before they can close a ticket. I didn't think much of it; it's just a dropdown.",
+      "It's not just a dropdown, I suppose. There are 40 categories, half of them sound the same, and the ticket won't save until you pick one. Agents sit there reading the list on every single call. But IT said it was a small change."
+    ],
+    short: "The CRM got a release in late October — a mandatory resolution-category dropdown on every ticket.",
+    clue: "A CRM release on Oct 27 added a mandatory 'resolution category' field; the list has 40 look-alike options and a ticket won't save without one.",
+    mood: 8
+  },
+  {
+    id: "who",
+    triggers: ["who", "new hires", "new agents", "everyone", "all agents", "tenured", "experienced", "veterans", "whole team"],
+    layers: [
+      "Everyone, as far as I can tell. That's partly why I landed on training for all 40 — it didn't look like a few people struggling.",
+      "I did check after our last chat about this: the tenured agents — five, ten years in — slowed down by the same amount as the week-one hires. Same two minutes. Which is… odd, for a skills problem."
+    ],
+    short: "Everyone slowed down — new hires and veterans alike.",
+    clue: "Tenured agents slowed exactly as much as new hires — which argues against a skills gap.",
+    mood: 4
+  },
+  {
+    id: "scope",
+    triggers: ["chat", "email", "channel", "phone queue", "other queues", "everywhere", "every channel"],
+    layers: [
+      "It's the phone queue where it hurts. That's where the handle-time report comes from.",
+      "Chat is interesting, actually — same agents, same customers, and chat handle time hasn't moved at all. But chat doesn't use the CRM form; it's a different tool."
+    ],
+    short: "It's the phone queue. Chat — same team, different tool — is unaffected.",
+    clue: "Chat handle time is flat. Same agents, different tool: chat never touches the CRM form.",
+    mood: 4
+  },
+  {
+    id: "deadline",
+    triggers: ["friday", "deadline", "budget", "cost", "executives", "leadership", "your boss", "exec review", "the deadline"],
+    layers: [
+      "Exec review is Friday. I need to walk in with a plan and a date, not a shrug. That's the pressure, honestly.",
+      "Between us? A credible diagnosis on Friday would probably land better than a course date. Leadership cares that the number comes back down, not how."
+    ],
+    short: "Exec review is Friday — I need a plan, though a credible diagnosis would land fine.",
+    mood: 0
+  },
+  {
+    id: "fix_form",
+    triggers: ["fix the form", "remove the field", "dropdown", "fewer categories", "defaults", "job aid", "cheat sheet", "trim the list", "top categories"],
+    requires: "change",
+    layers: [
+      "Huh. If the list were the top five categories with a sensible default, agents would barely notice the field — and I could get that approved as a config tweak this week, no course build, no pulling 40 people off the phones. That… might actually be the plan for Friday.",
+      "And a one-page job aid for the weird edge cases would cover the rest. You know, I came in here wanting a course. I think I wanted it because it was the only fix I could picture."
+    ],
+    short: "Trimming the category list with smart defaults is a config tweak I could get approved this week.",
+    mood: 8
+  },
+  {
+    id: "bot",
+    triggers: ["are you a bot", "are you real", "are you ai", "robot", "actual person", "human"],
+    layers: [
+      "I'm a support operations manager with a staffing spreadsheet and a Friday deadline, which is about as real as it gets. Ask me about the numbers."
+    ],
+    short: "Very real, very deadline-driven. Ask me about the numbers.",
+    mood: 2
+  },
+  {
+    id: "smalltalk",
+    triggers: ["how are you", "your day", "weather", "coffee", "weekend"],
+    layers: [
+      "Busy, like everyone. Two weeks of staring at a handle-time chart that won't behave. Anyway — what do you need to know?"
+    ],
+    short: "Busy. Anyway — what do you need to know?",
+    mood: 1
+  }
+];
+
+var FOLLOWUP_WORDS = ["tell me more", "go on", "why", "more about that", "explain", "what else", "dig deeper", "and then", "details"];
+
+var FALLBACKS = [
+  "Hmm, I'm not sure I follow. I can tell you about the numbers, when it started, who it hit, or what changed around then.",
+  "That's outside what I can speak to. What I know is the queue got slower about two weeks ago and hasn't recovered.",
+  "I don't have that in front of me. Try me on the handle time, the timeline, or the team."
+];
+
+var SUGGESTIONS = [
+  "How much has handle time actually changed?",
+  "When did it start?",
+  "Did anything change around then?",
+  "Who's affected — everyone or a few people?",
+  "Is it every channel, or just one?"
+];
+
+var RECOMMENDATIONS = [
+  {
+    id: "train",
+    label: "Schedule the mandatory one-hour training for all 40 agents, as requested.",
+    verdict: "The requested fix",
+    text: "This treats a workflow problem as a people problem. The evidence you gathered — a step change on Oct 28, veterans slowing exactly like new hires, chat untouched — points at the CRM field, not at skills. Training 40 people to cope with a 40-item dropdown leaves the two lost minutes in every call."
+  },
+  {
+    id: "fix",
+    label: "Fix the workflow first: trim the category list to the top few, add smart defaults, ship a one-page job aid — then re-measure in two weeks.",
+    verdict: "Matches the evidence",
+    text: "This is the recommendation the clues were building toward. Five categories cover about 90% of tickets, a default removes the decision from most calls, and re-measuring in two weeks tells leadership on Friday exactly how you'll know it worked."
+  },
+  {
+    id: "wait",
+    label: "Gather more data for another month before changing anything.",
+    verdict: "Too passive",
+    text: "Caution is cheap to recommend and expensive here: the pattern is already sharp (a dated step change with a matching release), and every week of waiting costs roughly two minutes on every phone call. You had enough to act — and a fix you can measure."
+  }
+];
+</script>
+<script>
+/* ======================= engine (no need to edit) ======================= */
+(function () {
+  var mood = 62, turnsLeft = TURNS_TOTAL, lastTopic = null, fallbackIdx = 0, over = false;
+  var depth = {}, cluesFound = [];
+  TOPICS.forEach(function (t) { depth[t.id] = 0; });
+  var TOTAL_CLUES = TOPICS.filter(function (t) { return t.clue; }).length;
+
+  var log = document.getElementById("rpLog");
+  var form = document.getElementById("rpForm");
+  var input = document.getElementById("rpText");
+  var chipsEl = document.getElementById("rpChips");
+  var notesEl = document.getElementById("rpNotes");
+  var notesEmpty = document.getElementById("rpNotesEmpty");
+
+  function addMsg(who, text) {
+    var d = document.createElement("div");
+    d.className = "rp-msg " + (who === "Sam" ? "sam" : "you");
+    var w = document.createElement("span");
+    w.className = "who"; w.textContent = who;
+    d.appendChild(w);
+    d.appendChild(document.createTextNode(text));
+    log.appendChild(d);
+    log.scrollTop = log.scrollHeight;
+    return d;
+  }
+
+  function normalize(s) {
+    return s.toLowerCase().replace(/[^a-z0-9\s]/g, " ").replace(/\s+/g, " ").trim();
+  }
+
+  function scoreTopic(t, norm) {
+    var score = 0;
+    t.triggers.forEach(function (trig) {
+      if (trig.indexOf(" ") !== -1) {
+        if (norm.indexOf(trig) !== -1) score += 3;
+      } else if (new RegExp("\\b" + trig + "\\b").test(norm)) {
+        score += 1;
+      }
+    });
+    return score;
+  }
+
+  function moodLabel() {
+    if (mood >= 60) return "Open";
+    if (mood >= 45) return "Curious";
+    if (mood >= 28) return "Guarded";
+    return "Defensive";
+  }
+
+  function renderSide() {
+    document.getElementById("rpMoodName").textContent = moodLabel();
+    document.getElementById("rpMoodBar").style.width = Math.max(0, Math.min(100, mood)) + "%";
+    document.getElementById("rpTurns").textContent = turnsLeft;
+    notesEl.innerHTML = "";
+    cluesFound.forEach(function (c) {
+      var li = document.createElement("li");
+      li.textContent = c;
+      notesEl.appendChild(li);
+    });
+    notesEmpty.style.display = cluesFound.length ? "none" : "";
+  }
+
+  function grantClue(t) {
+    if (t.clue && cluesFound.indexOf(t.clue) === -1) cluesFound.push(t.clue);
+  }
+
+  function serveTopic(t, norm) {
+    // A fix-it answer before the learner has found the change gets pushback.
+    if (t.requires && depth[t.requires] === 0) {
+      mood = Math.max(0, mood - 3);
+      return "Fix what, exactly? Nobody's shown me anything broken in the form — I came to you about handle time being up. If you think something changed, ask me about it.";
+    }
+    var fresh = depth[t.id] < t.layers.length;
+    var idx = Math.min(depth[t.id], t.layers.length - 1);
+    if (fresh) { depth[t.id]++; mood = Math.max(0, Math.min(100, mood + (t.mood || 0))); }
+    grantClue(t);
+    lastTopic = t;
+    var reply = t.layers[idx];
+
+    // Two questions in one message: answer the runner-up briefly too.
+    var best = scoreTopic(t, norm), second = null, secondScore = 0;
+    TOPICS.forEach(function (o) {
+      if (o.id === t.id || o.requires) return;
+      var s = scoreTopic(o, norm);
+      if (s >= 2 && s >= best * 0.6 && s > secondScore) { second = o; secondScore = s; }
+    });
+    if (second) {
+      reply += "\n\nAnd on that: " + second.short.charAt(0).toLowerCase() + second.short.slice(1);
+      grantClue(second);
+      if (depth[second.id] === 0) depth[second.id] = 1;
+    }
+    return reply;
+  }
+
+  function respond(raw) {
+    var norm = normalize(raw);
+    var scored = TOPICS.map(function (t) { return { t: t, s: scoreTopic(t, norm) }; })
+                       .sort(function (a, b) { return b.s - a.s; });
+    var isFollowup = FOLLOWUP_WORDS.some(function (w) { return norm.indexOf(w) !== -1; });
+
+    if (isFollowup && lastTopic && scored[0].s < 3) {
+      if (depth[lastTopic.id] < lastTopic.layers.length) return serveTopic(lastTopic, norm);
+      return "That's honestly all I've got on that. Ask me about something else — the numbers, the timing, the team.";
+    }
+    // Short, pointed questions ("What changed?", "Who's affected?") often rest
+    // on a single trigger word — accept a lone match when the question is brief.
+    var shortQ = norm.split(" ").length <= 4;
+    if (scored[0].s >= 2 || (scored[0].s >= 1 && shortQ)) return serveTopic(scored[0].t, norm);
+
+    var fb = FALLBACKS[fallbackIdx % FALLBACKS.length];
+    fallbackIdx++;
+    return fb;
+  }
+
+  function endChat() {
+    over = true;
+    document.getElementById("rpCompose").style.display = "none";
+    var end = document.getElementById("rpEnd");
+    var box = document.createElement("div");
+    box.className = "rp-wrap";
+    var h = document.createElement("h3");
+    h.textContent = "Time to recommend";
+    var p = document.createElement("p");
+    p.style.cssText = "margin:0 0 14px;color:#43514a;font-size:15px";
+    p.textContent = "The meeting's over. Based on what you uncovered, what do you tell Sam — and leadership — to do?";
+    box.appendChild(h); box.appendChild(p);
+    RECOMMENDATIONS.forEach(function (r) {
+      var b = document.createElement("button");
+      b.className = "rp-rec";
+      b.textContent = r.label;
+      b.addEventListener("click", function () { showScorecard(r); });
+      box.appendChild(b);
+    });
+    end.appendChild(box);
+  }
+
+  function showScorecard(rec) {
+    var end = document.getElementById("rpEnd");
+    end.innerHTML = "";
+    var box = document.createElement("div");
+    box.className = "rp-score";
+    var foundChange = TOPICS.some(function (t) {
+      return t.id === "change" && cluesFound.indexOf(t.clue) !== -1;
+    });
+    var foundTiming = TOPICS.some(function (t) {
+      return t.id === "timing" && cluesFound.indexOf(t.clue) !== -1;
+    });
+
+    var discV, discP;
+    if (cluesFound.length >= TOTAL_CLUES) { discV = "Complete picture"; discP = "You found every clue the scenario held — the symptom, the timing, the change, the people, and the scope."; }
+    else if (cluesFound.length >= 3) { discV = "Solid discovery"; discP = "You found " + cluesFound.length + " of " + TOTAL_CLUES + " clues — enough to argue from evidence, with a gap or two."; }
+    else if (cluesFound.length >= 1) { discV = "Partial picture"; discP = "Only " + cluesFound.length + " of " + TOTAL_CLUES + " clues surfaced. The meeting clock is short on purpose: pointed questions early beat broad ones late."; }
+    else { discV = "Mostly guesswork"; discP = "No clues landed in the case notes. Sam answered what he was asked — the discovery questions (how much, when, who, what changed) were the whole game."; }
+
+    var rootV, rootP;
+    if (foundChange) { rootV = "Identified"; rootP = "The Oct 27 CRM release and its mandatory category field — a workflow change landing one day before the step up in handle time."; }
+    else if (foundTiming) { rootV = "Halfway there"; rootP = "You established the sharp Oct 28 start, which rules out gradual skill fade — but you didn't get to what actually changed that week."; }
+    else { rootV = "Not identified"; rootP = "Without the timing and the change, 'agents got slower' stays a mystery — and training stays the default guess."; }
+
+    var relV = moodLabel(), relP;
+    if (mood >= 60) relP = "Sam leaves the meeting feeling heard — you asked before prescribing, so he'll carry your recommendation into the exec review himself.";
+    else if (mood >= 45) relP = "Sam is persuadable but not sold. A recommendation this week would need the evidence spelled out for him.";
+    else if (mood >= 28) relP = "Sam got guarded — prescribing early, or pushing past his answers, costs trust you then have to win back.";
+    else relP = "Sam is defensive. Even a correct recommendation would struggle to land from here; the relationship needed repair before the advice.";
+
+    function row(k, v, p) {
+      return '<div class="rp-score-row"><div class="k">' + k + '</div><div class="v">' + v + "</div><p>" + p + "</p></div>";
+    }
+    box.innerHTML = "<h3>Scorecard</h3>" +
+      row("Discovery", discV + " — " + cluesFound.length + "/" + TOTAL_CLUES + " clues", discP) +
+      row("Root cause", rootV, rootP) +
+      row("Relationship", relV, relP) +
+      row("Recommendation", rec.verdict, rec.text) +
+      '<div style="margin-top:16px"><button class="rp-btn dark" onclick="location.reload()">Run it again</button></div>';
+    end.appendChild(box);
+    box.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  }
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    if (over) return;
+    var text = input.value.trim();
+    if (!text) return;
+    input.value = "";
+    addMsg("You", text);
+    turnsLeft--;
+    renderSide();
+    var typing = addMsg("Sam", "typing…");
+    typing.classList.add("typing");
+    setTimeout(function () {
+      var reply = respond(text);
+      typing.remove();
+      addMsg("Sam", reply);
+      renderSide();
+      if (turnsLeft <= 0 && !over) {
+        setTimeout(function () {
+          addMsg("Sam", "We're at time — I have to take something to Friday's review. Give me your recommendation.");
+          endChat();
+        }, 700);
+      }
+    }, 600);
+  });
+
+  document.getElementById("rpWrapBtn").addEventListener("click", function () {
+    if (over) return;
+    addMsg("Sam", "Okay — let's land it. What's your recommendation?");
+    endChat();
+  });
+
+  SUGGESTIONS.forEach(function (s) {
+    var b = document.createElement("button");
+    b.className = "rp-chip";
+    b.type = "button";
+    b.textContent = s;
+    b.addEventListener("click", function () {
+      input.value = s;
+      form.dispatchEvent(new Event("submit", { cancelable: true }));
+    });
+    chipsEl.appendChild(b);
+  });
+
+  addMsg("Sam", "Hi, thanks for making time on short notice. Short version: handle time is up about 30% in the last two weeks, so I need a mandatory one-hour training for all 40 agents, ready to announce by Friday. What do you need from me?");
+  renderSide();
+})();
+</script>
+</body>
+</html>

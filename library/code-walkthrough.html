@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Code Walkthrough — Rise Blocks Workbench</title>
+<link rel="stylesheet" href="../assets/site.css">
+</head>
+<body>
+
+<header class="site-head">
+  <div class="wrap">
+    <a class="wordmark" href="../index.html">Rise Blocks Workbench<span class="dot">.</span>
+      <small>Working title · proof of concept</small></a>
+    <nav><a href="../index.html#blocks">All blocks</a></nav>
+  </div>
+</header>
+
+<main class="wrap" data-block-file="../blocks/code-walkthrough.html">
+
+  <p style="margin-top:22px"><a class="back" href="../index.html#blocks">← Back to the library</a></p>
+
+  <section class="block-head">
+    <span class="kind">Code reading</span>
+    <h1>Code Walkthrough</h1>
+    <p>Pasted code in a course usually gets skimmed. This block walks a snippet one idea at a time:
+       each step highlights the lines that matter and explains them in plain language, and the last
+       steps turn reading into a bug hunt. The sample walks a tiny error-rate function with a
+       divide-by-zero hiding in it.</p>
+  </section>
+
+  <div class="demo-frame">
+    <iframe src="../blocks/code-walkthrough.html" style="height:640px" title="Code Walkthrough live demo"></iframe>
+  </div>
+  <p class="demo-note">Live demo — the actual block file. Arrow keys work too: ← and → move between steps.</p>
+
+  <div class="actions">
+    <button class="btn" data-copy-block>Copy the code</button>
+    <a class="btn ghost" href="../blocks/code-walkthrough.html" download>Download the file</a>
+  </div>
+
+  <div class="cols">
+    <div>
+      <h2>Add it to Rise</h2>
+      <ol>
+        <li>Copy the code below (or download the file).</li>
+        <li>In your Rise 360 course, insert a <b>custom code block</b> where the walkthrough belongs and paste the entire file in — or upload it as a zip package if your version of Rise asks for one.</li>
+        <li>Preview the lesson. Nothing to host and nothing external to load.</li>
+      </ol>
+      <h2 style="margin-top:24px">Make it yours</h2>
+      <ul>
+        <li>The snippet is the <code>CODE</code> list at the top of the script — one string per line, in order.</li>
+        <li>Steps are the <code>STEPS</code> list: the 1-based line numbers to highlight, a title, and the explanation. Add or remove steps freely; the dots and counter rebuild themselves.</li>
+        <li>A step can carry a <code>fix</code> snippet, shown in a dark box — built for “here's the repair” moments.</li>
+        <li>Works for any language. The sample is JavaScript, but NRQL queries and config files walk just as well.</li>
+      </ul>
+    </div>
+    <div class="note-box">
+      <h2>Teaching note</h2>
+      <p><b>When to use it:</b> anywhere a course currently shows a code block and hopes. Reading code is a
+         separate skill from writing it, and it's the one working engineers use daily — this block teaches
+         the narrated, line-by-line read you'd do at a whiteboard.</p>
+      <p><b>Running it live:</b> at the “spot the bug” step, stop and take answers before advancing.
+         The room will find the empty-input case faster than they expect, which is the moment the
+         “read the edges first” habit sticks.</p>
+      <p><b>Variation:</b> delete the fix step and end on the bug. Learners propose the guard themselves —
+         in a discussion block, or out loud in a live session — then compare against yours next lesson.</p>
+    </div>
+  </div>
+
+  <div class="source-box">
+    <header><span>code-walkthrough.html — full source</span>
+      <button class="copy-mini" data-copy-block>Copy</button></header>
+    <pre><code id="sourceCode">Loading source…</code></pre>
+  </div>
+
+</main>
+
+<footer class="site-foot">
+  <div class="wrap">An original implementation, built for this library.</div>
+</footer>
+
+<script src="../assets/site.js"></script>
+</body>
+</html>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Comeback Quiz — Rise Blocks Workbench</title>
+<link rel="stylesheet" href="../assets/site.css">
+</head>
+<body>
+
+<header class="site-head">
+  <div class="wrap">
+    <a class="wordmark" href="../index.html">Rise Blocks Workbench<span class="dot">.</span>
+      <small>Working title · proof of concept</small></a>
+    <nav><a href="../index.html#blocks">All blocks</a></nav>
+  </div>
+</header>
+
+<main class="wrap" data-block-file="../blocks/comeback-quiz.html">
+
+  <p style="margin-top:22px"><a class="back" href="../index.html#blocks">← Back to the library</a></p>
+
+  <section class="block-head">
+    <span class="kind">Knowledge check</span>
+    <h1>Comeback Quiz</h1>
+    <p>A quiz with a built-in comeback round. Learners answer everything once; after that, each new
+       round asks <em>only</em> the questions they missed, until all of them are mastered.
+       Wrong answers stop being a dead end and become the study plan.</p>
+  </section>
+
+  <div class="demo-frame">
+    <iframe src="../blocks/comeback-quiz.html" style="height:700px" title="Comeback Quiz live demo"></iframe>
+  </div>
+  <p class="demo-note">Live demo — this is the actual block file running, the same one you copy below. Deliberately miss a couple of answers to see the comeback round.</p>
+
+  <div class="actions">
+    <button class="btn" data-copy-block>Copy the code</button>
+    <a class="btn ghost" href="../blocks/comeback-quiz.html" download>Download the file</a>
+  </div>
+
+  <div class="cols">
+    <div>
+      <h2>Add it to Rise</h2>
+      <ol>
+        <li>Copy the code below (or download the file).</li>
+        <li>In your Rise 360 course, insert a <b>custom code block</b> where the check belongs and paste the entire file in — or upload it as a zip package if your version of Rise asks for one.</li>
+        <li>Preview the lesson. The block is fully self-contained: no hosting, no external calls, nothing else to configure.</li>
+      </ol>
+      <h2 style="margin-top:24px">Make it yours</h2>
+      <ul>
+        <li>Questions live in one clearly marked <code>QUESTIONS</code> list at the top of the script — question, options, the correct answer's position, and the feedback text. Edit text only; no logic to touch.</li>
+        <li>Change the quiz title in the heading at the top of the file.</li>
+        <li>Restyle in the <code>&lt;style&gt;</code> block — the accent color is <code>#0e7a5f</code> throughout.</li>
+      </ul>
+    </div>
+    <div class="note-box">
+      <h2>Teaching note</h2>
+      <p><b>When to use it:</b> as the closing check of a lesson, where the goal is mastery rather than a grade.
+         A standard Rise quiz tells learners their score and moves on; this one spends their retry time
+         exactly where they're weak.</p>
+      <p><b>Running it live:</b> watch for the first-try score at the end — it's a clean read on which
+         questions were genuinely hard for the room, versus which were careless clicks. Those hard
+         questions are your reteach list.</p>
+      <p><b>Variation:</b> write the feedback (<code>why</code>) fields as pointers back to the lesson —
+         “see the golden signals table” — so a missed question routes the learner to the exact spot
+         that teaches it.</p>
+    </div>
+  </div>
+
+  <div class="source-box">
+    <header><span>comeback-quiz.html — full source</span>
+      <button class="copy-mini" data-copy-block>Copy</button></header>
+    <pre><code id="sourceCode">Loading source…</code></pre>
+  </div>
+
+</main>
+
+<footer class="site-foot">
+  <div class="wrap">An original implementation, built for this library. The missed-questions-only pattern is a
+    community idea — this code, design, and sample content are this site's own.</div>
+</footer>
+
+<script src="../assets/site.js"></script>
+</body>
+</html>

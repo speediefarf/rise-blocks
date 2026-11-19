@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rise Blocks Workbench — Custom Rise 360 blocks for technical training</title>
+<meta name="description" content="A small library of original, single-file custom blocks for Rise 360, built for technical training. Live demos, copyable code, and a teaching note for every block.">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+
+<header class="site-head">
+  <div class="wrap">
+    <a class="wordmark" href="index.html">Rise Blocks Workbench<span class="dot">.</span>
+      <small>Working title · proof of concept</small></a>
+    <nav>
+      <a href="#blocks">Blocks</a>
+      <a href="#principles">Principles</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="hero">
+    <h1>Custom Rise 360 blocks, built for <em>technical training</em>.</h1>
+    <p>A small, growing library of original interactive blocks. Every block is one self-contained
+       HTML file — no dependencies, nothing to host — with a live demo, the full source,
+       and a short note on how to teach with it.</p>
+    <div class="chips">
+      <span class="chip"><b>3</b> blocks live</span>
+      <span class="chip"><b>1 file</b> per block</span>
+      <span class="chip"><b>0</b> dependencies</span>
+      <span class="chip"><b>0</b> API keys</span>
+    </div>
+  </section>
+
+  <section class="catalog" id="blocks">
+    <h2>The library</h2>
+    <p class="lede">Try each block right here, then take the code. What you play with on the
+       block's page is the exact file you paste into Rise — the demo and the download never drift apart.</p>
+    <div class="grid">
+
+      <a class="card" href="library/comeback-quiz.html">
+        <span class="kind">Knowledge check</span>
+        <h3>Comeback Quiz</h3>
+        <p>A quiz with a built-in comeback round: after the first pass, learners only re-answer
+           the questions they missed, until everything is mastered. No re-answering what they already know.</p>
+        <span class="tags"><span class="tag">Mastery learning</span><span class="tag">Retry loop</span></span>
+        <span class="go">Try it &amp; get the code →</span>
+      </a>
+
+      <a class="card" href="library/code-walkthrough.html">
+        <span class="kind">Code reading</span>
+        <h3>Code Walkthrough</h3>
+        <p>Step through a code snippet one idea at a time: each step highlights the lines that
+           matter and explains them in plain language, ending with a “spot the bug” reveal.</p>
+        <span class="tags"><span class="tag">Step-through</span><span class="tag">Bug hunt</span></span>
+        <span class="go">Try it &amp; get the code →</span>
+      </a>
+
+      <a class="card" href="library/discovery-roleplay.html">
+        <span class="kind">Scenario</span>
+        <h3>Discovery Roleplay</h3>
+        <p>A stakeholder simulation with no AI at all: a scripted persona answers typed questions
+           by keyword matching, while a coaching panel tracks mood, time, and the clues you uncover.</p>
+        <span class="tags"><span class="tag">Branching chat</span><span class="tag">Scorecard</span></span>
+        <span class="go">Try it &amp; get the code →</span>
+      </a>
+
+      <div class="card soon">
+        <span class="kind">In the workshop</span>
+        <h3>Before / After Slider</h3>
+        <p>Drag a handle to compare two states of the same screen — a dashboard before and after
+           a fix, a page before and after a deploy. In development.</p>
+        <span class="tags"><span class="tag">Comparison</span><span class="tag">Planned</span></span>
+        <span class="go">Coming soon</span>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="section" id="principles">
+    <h2>House rules</h2>
+    <p class="lede">Four constraints every block in this library is built under.</p>
+    <div class="principles">
+      <div class="principle">
+        <h3>One file, zero dependencies</h3>
+        <p>HTML, CSS, and JS in a single file. No libraries, no build step, no external calls —
+           so nothing can break when a CDN changes or a network blocks it.</p>
+      </div>
+      <div class="principle">
+        <h3>Honest mechanics</h3>
+        <p>If a block is scripted, it says so. Learners are told how the trick works;
+           the mechanism is part of the lesson, never hidden from them.</p>
+      </div>
+      <div class="principle">
+        <h3>Content lives in one obvious place</h3>
+        <p>Questions, code steps, and dialogue sit in a clearly marked data section at the top
+           of the script, so adapting a block means editing text, not hunting through logic.</p>
+      </div>
+      <div class="principle">
+        <h3>A teaching note ships with it</h3>
+        <p>Every block page includes when to use it, how to run it in a session, and the
+           variations worth trying. The pedagogy is part of the artifact.</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-foot">
+  <div class="wrap">
+    Built by Michael Caron for his own classes, and shared for other instructors to adapt.
+    Inspired by the wider Rise custom-block community — every block here is an original implementation.
+  </div>
+</footer>
+
+</body>
+</html>

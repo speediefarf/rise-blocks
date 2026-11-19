@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Comeback Quiz</title>
+<style>
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:#f4f6f4;color:#1d2521;line-height:1.5}
+  .cq{max-width:860px;margin:0 auto;padding:20px}
+  .cq-card{background:#fff;border:1px solid #dde3dd;border-radius:16px;padding:26px;
+    box-shadow:0 8px 24px rgba(20,32,28,.06)}
+  .cq-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:16px}
+  .cq-label{font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#0e7a5f;margin-bottom:4px}
+  .cq-title{margin:0;font-size:26px;letter-spacing:-.01em}
+  .cq-badges{display:flex;flex-direction:column;gap:8px;align-items:flex-end}
+  .cq-badge{background:#e9f4f0;color:#0a5c48;padding:6px 12px;border-radius:999px;font-size:13px;font-weight:700}
+  .cq-badge.round{background:#fdf1dc;color:#8a5a12}
+  .cq-score{display:flex;flex-wrap:wrap;gap:10px;background:#f7f9f7;border:1px solid #e4e9e4;
+    border-radius:12px;padding:10px 14px;font-size:14px;margin-bottom:20px}
+  .cq-score span b{font-size:15px}
+  .cq-q{font-size:21px;font-weight:700;line-height:1.35;margin:0 0 18px}
+  .cq-answers{display:grid;gap:10px}
+  .cq-answer{width:100%;text-align:left;border:2px solid #d4dad4;background:#fff;color:#1d2521;
+    border-radius:12px;padding:13px 16px;font-size:16px;cursor:pointer;transition:border-color .15s,background .15s}
+  .cq-answer:hover:not(:disabled){border-color:#0e7a5f;background:#f2f8f5}
+  .cq-answer:disabled{cursor:default}
+  .cq-answer.right{border-color:#1d9d63;background:#eafaf1;font-weight:700}
+  .cq-answer.wrong{border-color:#d24545;background:#fdf0f0;font-weight:700}
+  .cq-feedback{margin-top:16px;min-height:24px;font-size:15px}
+  .cq-feedback .verdict{font-weight:800}
+  .cq-feedback .verdict.right{color:#157347}
+  .cq-feedback .verdict.wrong{color:#b02a2a}
+  .cq-feedback .why{display:block;margin-top:4px;color:#43514a;font-weight:400}
+  .cq-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
+  .cq-btn{border:0;border-radius:10px;padding:12px 18px;font-size:15px;font-weight:700;cursor:pointer}
+  .cq-btn.primary{background:#0e7a5f;color:#fff}
+  .cq-btn.primary:disabled{background:#a9b3ac;cursor:not-allowed}
+  .cq-btn.retry{background:#e8a33d;color:#231a05}
+  .cq-btn.dark{background:#1d2521;color:#fff}
+  .cq-btn.ghost{background:transparent;border:2px solid #d4dad4;color:#1d2521}
+  .cq-done{background:#eafaf1;border:1px solid #9fd8b8;border-radius:14px;padding:20px;font-size:16px}
+  .cq-done h3{margin:0 0 8px;font-size:20px}
+  .cq-done p{margin:0 0 6px}
+  @media(max-width:600px){.cq-badges{align-items:flex-start}.cq-q{font-size:19px}}
+</style>
+</head>
+<body>
+<div class="cq">
+  <div class="cq-card">
+    <div class="cq-head">
+      <div>
+        <div class="cq-label">Knowledge check</div>
+        <h2 class="cq-title" id="cqTitle">Observability basics</h2>
+      </div>
+      <div class="cq-badges">
+        <span class="cq-badge round" id="cqRound">Round 1</span>
+        <span class="cq-badge" id="cqProgress">Question 1 of 6</span>
+      </div>
+    </div>
+
+    <div class="cq-score" aria-live="polite">
+      <span>Mastered: <b id="cqMastered">0</b></span>
+      <span>Missed this round: <b id="cqMissed">0</b></span>
+      <span>Left in round: <b id="cqLeft">6</b></span>
+    </div>
+
+    <div id="cqBody">
+      <p class="cq-q" id="cqQuestion"></p>
+      <div class="cq-answers" id="cqAnswers"></div>
+      <div class="cq-feedback" id="cqFeedback" aria-live="polite"></div>
+      <div class="cq-actions">
+        <button class="cq-btn primary" id="cqNext" disabled>Next</button>
+        <button class="cq-btn retry" id="cqRetry" style="display:none">Start comeback round</button>
+        <button class="cq-btn dark" id="cqRestart" style="display:none">Restart full quiz</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   EDIT ME — your questions live here.
+   answer = index of the correct option. why = feedback shown
+   after answering, right or wrong.
+   ============================================================ */
+var QUESTIONS = [
+  {
+    q: "What are the four golden signals of a user-facing system?",
+    options: [
+      "CPU, memory, disk, and network",
+      "Latency, traffic, errors, and saturation",
+      "Logs, metrics, traces, and events",
+      "Uptime, downtime, MTTR, and MTBF"
+    ],
+    answer: 1,
+    why: "Latency, traffic, errors, and saturation — if you can only watch four things, watch these; they describe the service as its users experience it."
+  },
+  {
+    q: "In NRQL, which clause narrows a query down to a single application?",
+    options: ["FACET", "SINCE", "WHERE", "TIMESERIES"],
+    answer: 2,
+    why: "WHERE filters the events before anything is counted. FACET groups results, SINCE sets the time window, and TIMESERIES buckets them over time."
+  },
+  {
+    q: "What does an SLO actually measure?",
+    options: [
+      "How fast the servers are",
+      "Whether users are getting the level of service you promised them",
+      "How many alerts fired this week",
+      "The team's average ticket close time"
+    ],
+    answer: 1,
+    why: "A service level objective is a promise about user experience — for example, 99.9% of requests succeeding — measured over a window of time."
+  },
+  {
+    q: "A deploy finishes at 14:00. At 14:05 the error rate triples. What's the first thing to check?",
+    options: [
+      "Add more servers",
+      "Restart every instance",
+      "Wait an hour to see if it settles",
+      "The change that just shipped"
+    ],
+    answer: 3,
+    why: "Most incidents begin with a change. When the timeline points at a deploy, the deploy is suspect number one until the evidence clears it."
+  },
+  {
+    q: "Which of these is a trace?",
+    options: [
+      "A chart of requests per minute",
+      "One log line from a web server",
+      "The connected path of spans one request took through your services",
+      "A count of errors grouped by type"
+    ],
+    answer: 2,
+    why: "A trace follows a single request across services as a chain of timed spans — it's how you see where one slow or failing request actually spent its time."
+  },
+  {
+    q: "Your error budget for the month is fully spent by the 10th. What does that mean?",
+    options: [
+      "The SLO target was met early — ship freely",
+      "Users experienced more unreliability than promised, so reliability work outranks new features until the budget recovers",
+      "The monitoring bill is due",
+      "Alerts should be muted until next month"
+    ],
+    answer: 1,
+    why: "The error budget is the amount of unreliability the SLO allows. Burning it early is a signal to slow down and fix, not to mute the evidence."
+  }
+];
+
+/* ======================= engine (no need to edit) ======================= */
+(function () {
+  var mastered = {};        // index -> true once answered correctly in any round
+  var firstTryRight = 0;    // correct on the very first attempt
+  var attempted = {};       // index -> true once attempted at all
+  var round = 1;
+  var queue = QUESTIONS.map(function (_, i) { return i; });
+  var pos = 0;
+  var missedThisRound = [];
+  var answered = false;
+
+  var el = function (id) { return document.getElementById(id); };
+  var qEl = el("cqQuestion"), aEl = el("cqAnswers"), fEl = el("cqFeedback");
+  var nextBtn = el("cqNext"), retryBtn = el("cqRetry"), restartBtn = el("cqRestart");
+
+  function renderScore() {
+    el("cqMastered").textContent = Object.keys(mastered).length;
+    el("cqMissed").textContent = missedThisRound.length;
+    el("cqLeft").textContent = queue.length - pos - (answered ? 1 : 0);
+    el("cqRound").textContent = "Round " + round + (round > 1 ? " — missed questions only" : "");
+    el("cqProgress").textContent = "Question " + Math.min(pos + 1, queue.length) + " of " + queue.length;
+  }
+
+  function renderQuestion() {
+    answered = false;
+    var item = QUESTIONS[queue[pos]];
+    qEl.textContent = item.q;
+    fEl.innerHTML = "";
+    aEl.innerHTML = "";
+    item.options.forEach(function (text, i) {
+      var b = document.createElement("button");
+      b.className = "cq-answer";
+      b.textContent = text;
+      b.addEventListener("click", function () { answer(i, b); });
+      aEl.appendChild(b);
+    });
+    nextBtn.disabled = true;
+    nextBtn.style.display = "";
+    retryBtn.style.display = "none";
+    restartBtn.style.display = "none";
+    renderScore();
+  }
+
+  function answer(i, btn) {
+    if (answered) return;
+    answered = true;
+    var idx = queue[pos];
+    var item = QUESTIONS[idx];
+    var right = i === item.answer;
+    var firstAttempt = !attempted[idx];
+    attempted[idx] = true;
+
+    Array.prototype.forEach.call(aEl.children, function (b, bi) {
+      b.disabled = true;
+      if (bi === item.answer) b.classList.add("right");
+    });
+    if (!right) {
+      btn.classList.add("wrong");
+      missedThisRound.push(idx);
+    } else {
+      mastered[idx] = true;
+      if (firstAttempt) firstTryRight++;
+    }
+    fEl.innerHTML = "";
+    var v = document.createElement("span");
+    v.className = "verdict " + (right ? "right" : "wrong");
+    v.textContent = right ? "Correct." : "Not quite.";
+    var w = document.createElement("span");
+    w.className = "why";
+    w.textContent = item.why;
+    fEl.appendChild(v); fEl.appendChild(w);
+    nextBtn.disabled = false;
+    renderScore();
+  }
+
+  function endOfRound() {
+    var total = QUESTIONS.length;
+    var done = Object.keys(mastered).length;
+    aEl.innerHTML = ""; fEl.innerHTML = "";
+    if (missedThisRound.length === 0) {
+      qEl.textContent = "Quiz complete";
+      var box = document.createElement("div");
+      box.className = "cq-done";
+      box.innerHTML = "<h3>Everything mastered 🎉</h3>" +
+        "<p>First-try score: <b>" + firstTryRight + " of " + total + "</b>.</p>" +
+        "<p>Rounds taken: <b>" + round + "</b>. " +
+        (round === 1 ? "Clean sweep — no comeback round needed."
+                     : "The comeback rounds did their job: you finished on the questions that were actually hard for you, not the whole quiz again.") +
+        "</p>";
+      aEl.appendChild(box);
+      nextBtn.style.display = "none";
+      retryBtn.style.display = "none";
+      restartBtn.style.display = "";
+    } else {
+      qEl.textContent = "Round " + round + " complete";
+      var note = document.createElement("div");
+      note.className = "cq-done";
+      note.innerHTML = "<h3>" + done + " of " + total + " mastered</h3>" +
+        "<p>You missed <b>" + missedThisRound.length + "</b> question" +
+        (missedThisRound.length === 1 ? "" : "s") +
+        ". The comeback round asks only those — nothing you've already proven you know.</p>";
+      aEl.appendChild(note);
+      nextBtn.style.display = "none";
+      retryBtn.style.display = "";
+      restartBtn.style.display = "";
+    }
+    renderScore();
+  }
+
+  nextBtn.addEventListener("click", function () {
+    pos++;
+    if (pos >= queue.length) endOfRound(); else renderQuestion();
+  });
+
+  retryBtn.addEventListener("click", function () {
+    queue = missedThisRound.slice();
+    missedThisRound = [];
+    pos = 0;
+    round++;
+    renderQuestion();
+  });
+
+  restartBtn.addEventListener("click", function () {
+    mastered = {}; attempted = {}; firstTryRight = 0;
+    round = 1; missedThisRound = [];
+    queue = QUESTIONS.map(function (_, i) { return i; });
+    pos = 0;
+    renderQuestion();
+  });
+
+  renderQuestion();
+})();
+</script>
+</body>
+</html>

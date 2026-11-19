@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Code Walkthrough</title>
+<style>
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:#f4f6f4;color:#1d2521;line-height:1.5}
+  .cw{max-width:880px;margin:0 auto;padding:20px}
+  .cw-label{font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#0e7a5f}
+  .cw-title{margin:4px 0 6px;font-size:26px;letter-spacing:-.01em}
+  .cw-sub{margin:0 0 18px;color:#43514a;font-size:15px}
+  .cw-code{background:#14201c;border-radius:14px;padding:16px 0;overflow-x:auto;margin-bottom:16px}
+  .cw-line{display:flex;gap:0;padding:2px 16px 2px 0;border-left:4px solid transparent;transition:background .2s}
+  .cw-line .no{width:38px;flex:none;text-align:right;padding-right:14px;color:#5f7a6e;
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13.5px;user-select:none}
+  .cw-line code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    font-size:13.5px;color:#8fa89c;white-space:pre;transition:color .2s}
+  .cw-line.on{background:rgba(232,163,61,.13);border-left-color:#e8a33d}
+  .cw-line.on code{color:#f2f5f2}
+  .cw-line.on .no{color:#e8a33d}
+  .cw-panel{background:#fff;border:1px solid #dde3dd;border-radius:14px;padding:20px 22px;
+    box-shadow:0 8px 24px rgba(20,32,28,.05)}
+  .cw-step-kicker{font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#0e7a5f;margin-bottom:4px}
+  .cw-step-title{margin:0 0 8px;font-size:20px}
+  .cw-step-text{margin:0;color:#2c3831;font-size:15.5px}
+  .cw-step-text code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.92em;
+    background:#eceae2;border-radius:5px;padding:1px 5px}
+  .cw-fix{display:none;margin-top:14px;background:#14201c;border-radius:10px;padding:12px 16px}
+  .cw-fix.show{display:block}
+  .cw-fix code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px;color:#dce8e2;white-space:pre}
+  .cw-fix .plus{color:#7ee2ae}
+  .cw-nav{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:18px;flex-wrap:wrap}
+  .cw-btn{border:0;border-radius:10px;padding:11px 18px;font-size:15px;font-weight:700;cursor:pointer;background:#0e7a5f;color:#fff}
+  .cw-btn:disabled{background:#a9b3ac;cursor:not-allowed}
+  .cw-btn.ghost{background:transparent;border:2px solid #d4dad4;color:#1d2521}
+  .cw-dots{display:flex;gap:7px}
+  .cw-dot{width:10px;height:10px;border-radius:50%;background:#d4dad4;border:0;padding:0;cursor:pointer}
+  .cw-dot.on{background:#0e7a5f}
+  .cw-count{font-size:13px;color:#5c665f;font-weight:600}
+</style>
+</head>
+<body>
+<div class="cw">
+  <div class="cw-label">Code reading</div>
+  <h2 class="cw-title" id="cwTitle">Reading code: an error-rate summary</h2>
+  <p class="cw-sub" id="cwSub">Six lines of JavaScript that turn raw request events into the error-rate
+     number on a dashboard. Step through it one idea at a time — and watch for the trap near the end.</p>
+
+  <div class="cw-code" id="cwCode" aria-label="Code snippet"></div>
+
+  <div class="cw-panel">
+    <div class="cw-step-kicker" id="cwKicker">Step 1</div>
+    <h3 class="cw-step-title" id="cwStepTitle"></h3>
+    <p class="cw-step-text" id="cwStepText"></p>
+    <div class="cw-fix" id="cwFix"><code id="cwFixCode"></code></div>
+    <div class="cw-nav">
+      <button class="cw-btn ghost" id="cwPrev">← Back</button>
+      <div class="cw-dots" id="cwDots"></div>
+      <span class="cw-count" id="cwCount"></span>
+      <button class="cw-btn" id="cwNext">Next →</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   EDIT ME — the code being walked through, one string per line.
+   ============================================================ */
+var CODE = [
+  "function summarizeErrors(events) {",
+  "  const total = events.length;",
+  "  const errors = events.filter(e => e.status >= 500);",
+  "  const rate = errors.length / total;",
+  "  return Math.round(rate * 100);",
+  "}"
+];
+
+/* ============================================================
+   EDIT ME — the steps. lines = 1-based line numbers to light up.
+   Optional fix = a code snippet shown in a dark box (used for
+   the "here's the repair" step).
+   ============================================================ */
+var STEPS = [
+  {
+    lines: [1],
+    title: "Start with the contract",
+    text: "The function takes <code>events</code> — an array of request records, each with a " +
+          "<code>status</code> code — and promises to hand back a single number: the error rate " +
+          "as a whole percentage. Everything inside is in service of that promise."
+  },
+  {
+    lines: [2],
+    title: "Count everything",
+    text: "<code>total</code> is simply how many requests came in. This is the denominator of the " +
+          "rate — the number every error will be compared against. Keep this line in mind; it matters later."
+  },
+  {
+    lines: [3],
+    title: "Count the failures",
+    text: "<code>filter</code> keeps only the events whose status is 500 or above — the server-side " +
+          "errors. Client mistakes (404s and friends) don't count here: this function measures " +
+          "<em>our</em> failures, not the caller's."
+  },
+  {
+    lines: [4],
+    title: "Do the division",
+    text: "Errors divided by total gives a fraction like 0.043. Simple — and quietly dependent on " +
+          "an assumption the code never checks. Can you see it yet?"
+  },
+  {
+    lines: [5],
+    title: "Round it for humans",
+    text: "<code>rate * 100</code> turns the fraction into a percentage and <code>Math.round</code> " +
+          "drops the decimals, so a dashboard shows “4%” instead of “4.285714%”. The function ends here."
+  },
+  {
+    lines: [2, 4],
+    title: "Spot the bug: what if nothing happened?",
+    text: "Run this at 3 a.m. on a quiet service and <code>events</code> can be empty. Then " +
+          "<code>total</code> is 0, and line 4 divides by zero. In JavaScript that doesn't throw — " +
+          "it returns <code>NaN</code>, and the dashboard quietly displays “NaN%” instead of an error. " +
+          "The emptiest hour looks like a monitoring failure."
+  },
+  {
+    lines: [4],
+    title: "The fix: guard the denominator",
+    text: "One line, placed before the division, turns the silent <code>NaN</code> into an honest 0. " +
+          "Small functions earn trust at their edges: empty input, missing fields, and midnight are " +
+          "where they break. When you read code, read the edges first.",
+    fix: "+ if (total === 0) return 0;"
+  }
+];
+
+/* ======================= engine (no need to edit) ======================= */
+(function () {
+  var step = 0;
+  var codeEl = document.getElementById("cwCode");
+  var dotsEl = document.getElementById("cwDots");
+
+  function esc(s) {
+    return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  }
+
+  CODE.forEach(function (line, i) {
+    var row = document.createElement("div");
+    row.className = "cw-line";
+    row.id = "cwLine" + (i + 1);
+    row.innerHTML = '<span class="no">' + (i + 1) + "</span><code>" + esc(line) + "</code>";
+    codeEl.appendChild(row);
+  });
+
+  STEPS.forEach(function (_, i) {
+    var d = document.createElement("button");
+    d.className = "cw-dot";
+    d.setAttribute("aria-label", "Go to step " + (i + 1));
+    d.addEventListener("click", function () { go(i); });
+    dotsEl.appendChild(d);
+  });
+
+  function go(i) {
+    step = Math.max(0, Math.min(STEPS.length - 1, i));
+    var s = STEPS[step];
+    CODE.forEach(function (_, li) {
+      document.getElementById("cwLine" + (li + 1)).classList.toggle("on", s.lines.indexOf(li + 1) !== -1);
+    });
+    document.getElementById("cwKicker").textContent =
+      "Step " + (step + 1) + " of " + STEPS.length;
+    document.getElementById("cwStepTitle").textContent = s.title;
+    document.getElementById("cwStepText").innerHTML = s.text;
+    var fix = document.getElementById("cwFix");
+    if (s.fix) {
+      document.getElementById("cwFixCode").innerHTML =
+        '<span class="plus">' + esc(s.fix) + "</span>";
+      fix.classList.add("show");
+    } else {
+      fix.classList.remove("show");
+    }
+    Array.prototype.forEach.call(dotsEl.children, function (d, di) {
+      d.classList.toggle("on", di === step);
+    });
+    document.getElementById("cwCount").textContent =
+      "Lines " + s.lines.join(", ") + " highlighted";
+    document.getElementById("cwPrev").disabled = step === 0;
+    document.getElementById("cwNext").disabled = step === STEPS.length - 1;
+    document.getElementById("cwNext").textContent =
+      step === STEPS.length - 1 ? "Done" : "Next →";
+  }
+
+  document.getElementById("cwPrev").addEventListener("click", function () { go(step - 1); });
+  document.getElementById("cwNext").addEventListener("click", function () { go(step + 1); });
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "ArrowRight") go(step + 1);
+    if (e.key === "ArrowLeft") go(step - 1);
+  });
+
+  go(0);
+})();
+</script>
+</body>
+</html>

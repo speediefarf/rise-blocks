@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Discovery Roleplay — Rise Blocks Workbench</title>
+<link rel="stylesheet" href="../assets/site.css">
+</head>
+<body>
+
+<header class="site-head">
+  <div class="wrap">
+    <a class="wordmark" href="../index.html">Rise Blocks Workbench<span class="dot">.</span>
+      <small>Working title · proof of concept</small></a>
+    <nav><a href="../index.html#blocks">All blocks</a></nav>
+  </div>
+</header>
+
+<main class="wrap" data-block-file="../blocks/discovery-roleplay.html">
+
+  <p style="margin-top:22px"><a class="back" href="../index.html#blocks">← Back to the library</a></p>
+
+  <section class="block-head">
+    <span class="kind">Scenario</span>
+    <h1>Discovery Roleplay</h1>
+    <p>A stakeholder meeting in a chat window, with no AI anywhere in it. Sam is a scripted persona who
+       answers typed questions by keyword matching — and the scenario is a classic: a manager demanding
+       training for what turns out to be a workflow problem. A coaching panel tracks his mood, the
+       meeting clock, and the clues you uncover, then a scorecard grades the discovery, not the typing.</p>
+  </section>
+
+  <div class="demo-frame">
+    <iframe src="../blocks/discovery-roleplay.html" style="height:760px" title="Discovery Roleplay live demo"></iframe>
+  </div>
+  <p class="demo-note">Live demo — the actual block file. Try asking what changed two weeks ago. Try demanding the training immediately and watch the mood meter.</p>
+
+  <div class="actions">
+    <button class="btn" data-copy-block>Copy the code</button>
+    <a class="btn ghost" href="../blocks/discovery-roleplay.html" download>Download the file</a>
+  </div>
+
+  <div class="cols">
+    <div>
+      <h2>Add it to Rise</h2>
+      <ol>
+        <li>Copy the code below (or download the file).</li>
+        <li>In your Rise 360 course, insert a <b>custom code block</b> and paste the entire file in — or upload it as a zip package if your version of Rise asks for one.</li>
+        <li>Preview the lesson. No API keys, no external services — Sam runs entirely in the learner's browser.</li>
+      </ol>
+      <h2 style="margin-top:24px">Make it yours</h2>
+      <ul>
+        <li>The whole persona is the <code>TOPICS</code> table at the top of the script: trigger words Sam listens for, his replies as you dig deeper (layers), an optional clue for the case notes, and a mood effect.</li>
+        <li>Write triggers the way people actually talk, including the blunt versions — learners won't phrase questions the way you would.</li>
+        <li><code>TURNS_TOTAL</code> sets the meeting length; <code>RECOMMENDATIONS</code> holds the closing choices and their coaching text.</li>
+        <li>The sample scenario (a CRM change masquerading as a skills gap) swaps cleanly for any “the request isn't the problem” story in your domain.</li>
+      </ul>
+    </div>
+    <div class="note-box">
+      <h2>Teaching note</h2>
+      <p><b>When to use it:</b> before teaching needs analysis or stakeholder discovery — or any module whose
+         real lesson is “the first request is rarely the real problem.” Learners who jump to prescribing
+         feel Sam cool in real time; learners who ask about timing and change watch the case notes fill.</p>
+      <p><b>Running it live:</b> debrief from the scorecard, not from memory. Ask who found the CRM clue and
+         on which question — the room learns as much from each other's phrasing as from the scenario.
+         The strongest debrief line in the scenario is Sam's own: he wanted training because it was the
+         only fix he could picture.</p>
+      <p><b>Honesty note:</b> the block tells learners up front that Sam is scripted. That isn't a weakness —
+         it's the same transparency you'd want from a real AI roleplay, and it sets expectations so a
+         keyword miss reads as a mechanic, not a malfunction.</p>
+    </div>
+  </div>
+
+  <div class="source-box">
+    <header><span>discovery-roleplay.html — full source</span>
+      <button class="copy-mini" data-copy-block>Copy</button></header>
+    <pre><code id="sourceCode">Loading source…</code></pre>
+  </div>
+
+</main>
+
+<footer class="site-foot">
+  <div class="wrap">An original implementation, built for this library. Scripted-persona roleplays are a
+    community pattern — this persona, dialogue, engine, and scoring are this site's own.</div>
+</footer>
+
+<script src="../assets/site.js"></script>
+</body>
+</html>
